@@ -88,6 +88,4 @@ public class GlobalExceptionHandler {
                                      "An unexpected error occurred, %s",
                                      ex.getMessage())));
     }
-
-
 }

@@ -1,15 +1,17 @@
 package com.senibo.todo_list_with_authentication.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(description = "Standard API response wrapper.")
 public record ApiResponse<Data>(
-        Boolean success,
-        String message,
+        @Schema(example = "true") Boolean success,
+        @Schema(example = "Todos retrieved successfully") String message,
         Data data,
-        String error,
+        @Schema(example = "Invalid credentials") String error,
         List<String> errors
 ) {
 

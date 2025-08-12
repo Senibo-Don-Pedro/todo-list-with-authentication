@@ -37,18 +37,20 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable());
         http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.authorizeHttpRequests(auth -> auth
-                                           .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                           .requestMatchers("/api/v1/auth/**").permitAll()
-                                           .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
-//                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-        );
+        http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+                                               .permitAll()
+                                               .requestMatchers("/api/v1/auth/**")
+                                               .permitAll()
+                                               .requestMatchers("/v3/api-docs/**",
+                                                                "/swagger-ui" + "/**",
+                                                                "/swagger.html")
+                                               .permitAll()
+                                               //.requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                               .anyRequest()
+                                               .authenticated());
 
-        http.exceptionHandling(e -> e.
-                authenticationEntryPoint(securityErrorHandler)
-                .accessDeniedHandler(securityErrorHandler)
-        );
+        http.exceptionHandling(e -> e.authenticationEntryPoint(securityErrorHandler)
+                                     .accessDeniedHandler(securityErrorHandler));
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
